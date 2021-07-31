@@ -23,9 +23,9 @@ class Post extends Model
         // or...
         
         $query->when($filters['search'] ?? false, fn($query, $search) =>
-            $query
-                ->where('title', 'like', '%' . $search . '%')
-                ->orWhere('body', 'like', '%' . $search . '%'));
+            $query->where(fn($query) =>
+                $query->where('title', 'like', '%' . $search . '%')
+                    ->orWhere('body', 'like', '%' . $search . '%')));
 
         // select * from posts where exists(select * from categories where categories.id = posts.category_id and categories.slug = {category})
         // This is one option

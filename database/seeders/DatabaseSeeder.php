@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         Category::truncate();
         Post::truncate();
 
-        Post::factory(12)->create();
+        Post::factory(36)->create();
 
         // Setting specific data for a seeder
         /*

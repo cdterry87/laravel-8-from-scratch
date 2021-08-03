@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class RegisterController extends Controller
@@ -25,7 +26,9 @@ class RegisterController extends Controller
 
         // $attrs['password'] = bcrypt($attrs['password']); // Or you can use the `setAttribute` mutator in the model
 
-        User::create($attrs);
+        $user = User::create($attrs);
+
+        Auth::login($user);
 
         return redirect('/')->with('success', 'Your account has been created!');
     }

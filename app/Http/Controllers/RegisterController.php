@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class RegisterController extends Controller
 {
@@ -18,8 +18,8 @@ class RegisterController extends Controller
 
         $attrs = request()->validate([
             'name' => ['required', 'max:255'],
-            'username' => ['required', 'max:255', 'min:3'],
-            'email' => ['required', 'email', 'max:255'],
+            'username' => ['required', 'max:255', 'min:3', 'unique:users,username'],
+            'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')], // alternative way to write unique validation
             'password' => ['required', 'min:7']
         ]);
 
@@ -27,6 +27,6 @@ class RegisterController extends Controller
 
         User::create($attrs);
 
-        return redirect('/');
+        return redirect('/')->with('success', 'Your account has been created!');
     }
 }

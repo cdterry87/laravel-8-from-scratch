@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         // Comment::truncate();
 
         Post::factory(36)->create();
+        Comment::factory(9)->create(['post_id' => 36]);
 
         // Setting specific data for a seeder
         /*

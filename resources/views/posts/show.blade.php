@@ -50,24 +50,7 @@
                 </div>
 
                 <section class="col-span-8 col-start-5 mt-10 space-y-6">
-                    <x-card>
-                        <form action="" method="POST">
-                            @csrf
-    
-                            <header class="flex items-center">
-                                <img src="https://i.pravatar.cc/100?u={{ auth()->id() }}" alt="Avatar" width="42" class="rounded-full">
-                                <h2 class="ml-4">Want to participate?</h2>
-                            </header>
-    
-                            <div class="mt-6">
-                                <textarea name="body" id="" cols="30" rows="5" class="w-full text-sm focus:outline-none focus:ring" placeholder="Quick, think of something to say"></textarea>
-                            </div>
-    
-                            <div class="flex justify-end mt-6 border-t border-gray-200 pt-6">
-                                <button type="submit" class="bg-blue-500 text-white uppercase text-xs py-2 px-10 rounded-2xl hover:bg-blue-600">Post Comment</button>
-                            </div>
-                        </form>
-                    </x-card>
+                    @include('posts._add-comment-form')
 
                     @foreach ($post->comments as $comment)
                         <x-post-comment :comment="$comment" />

@@ -2,9 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\User;
 use App\Services\Newsletter;
 use App\Services\MailchimpNewsletter;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use MailchimpMarketing\ApiClient;
 
@@ -37,5 +40,13 @@ class AppServiceProvider extends ServiceProvider
     {
         // Disables mass assignment for all models
         Model::unguard();
+
+        Gate::define('admin', function (User $user) {
+            return $user->username === 'chaset';
+        });
+
+        Blade::if('admin', function () {
+            return request()->user() && request()->user()->can('admin'); // not quite right
+        });
     }
 }

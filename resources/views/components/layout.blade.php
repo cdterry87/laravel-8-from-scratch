@@ -28,8 +28,22 @@
                             <button href="/" class="text-xs font-bold uppercase">Welcome, {{ auth()->user()->name }}!</button>
                         </x-slot>
 
-                        <x-dropdown-item href="/admin/posts" :active="request()->is('admin/posts')">All Posts</x-dropdown-item>
-                        <x-dropdown-item href="/admin/posts/create" :active="request()->is('admin/posts/create')">Create Post</x-dropdown-item>
+                        {{-- @if(auth()->user()->can('admin'))
+                            <x-dropdown-item href="/admin/posts" :active="request()->is('admin/posts')">All Posts</x-dropdown-item>
+                            <x-dropdown-item href="/admin/posts/create" :active="request()->is('admin/posts/create')">Create Post</x-dropdown-item>
+                        @endif --}}
+
+                        {{-- @can('admin')
+                            <x-dropdown-item href="/admin/posts" :active="request()->is('admin/posts')">All Posts</x-dropdown-item>
+                            <x-dropdown-item href="/admin/posts/create" :active="request()->is('admin/posts/create')">Create Post</x-dropdown-item>
+                        @endcan --}}
+
+                        {{-- Custom Blade directive defined in AppServiceProvider -> boot() --}}
+                        @admin
+                            <x-dropdown-item href="/admin/posts" :active="request()->is('admin/posts')">All Posts</x-dropdown-item>
+                            <x-dropdown-item href="/admin/posts/create" :active="request()->is('admin/posts/create')">Create Post</x-dropdown-item>
+                        @endadmin
+
                         <x-dropdown-item href="#" x-data="{}" @click.prevent="document.querySelector('#logout-form').submit()">Log out</x-dropdown-item>
                     </x-dropdown>
                     <form id="logout-form" action="/logout" method="POST" class="hidden">

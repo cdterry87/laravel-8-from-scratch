@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -12,6 +13,10 @@ class PostController extends Controller
 {
     public function index()
     {
+        // ddd(Gate::allows('admin'));
+        // request()->user()->can('admin'); // returns a boolean
+        // $this->authorize('admin'); // will automatically return a 403 if it fails; otherwise it proceeds
+
         return view('posts.index', [
             'posts' => Post::latest()->filter(
                 request(['search', 'category', 'author'])

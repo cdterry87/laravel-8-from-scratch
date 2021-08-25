@@ -1,5 +1,8 @@
 <?php
 
+// NO LONGER BEING USED AS OF EPISODE 69
+// Switched middelware in routes/web.php to 'can:admin' instead
+
 namespace App\Http\Middleware;
 
 use Closure;
@@ -17,8 +20,7 @@ class MustBeAdministrator
      */
     public function handle(Request $request, Closure $next)
     {
-        if (auth()->guest() || auth()->user()->username !== 'chaset') {
-        // if (auth()->user()?->username !== 'chaset') { // PHP8 syntax
+        if (auth()->guest() || $request->user()->cannot('admin')) {
             abort(Response::HTTP_FORBIDDEN);
         }
 

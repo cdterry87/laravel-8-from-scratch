@@ -19,16 +19,24 @@ class AdminPostController extends Controller
         return view('admin.posts.create');
     }
 
-    public function store()
+    protected function validatePost(?Post $post = null): array // ? means Post is optional and default is null
     {
-        $attrs = request()->validate([
+        $post ??= new Post(); // If $post is null, create a new Post()
+
+        return request()->validate([
             'title' => 'required',
-            'thumbnail' => 'required|image',
-            'slug' => ['required', Rule::unique('posts', 'slug')],
+            'thumbnail' => $post->exists ? ['image'] : ['required', 'image'],
+            'slug' => ['required', Rule::unique('posts', 'slug')->ignore($post)],
             'excerpt' => 'required',
             'body' => 'required',
-            'category_id' => ['required', Rule::exists('categories', 'id')]
+            'category_id' => ['required', Rule::exists('categories', 'id')],
+            'published_at' => 'required'
         ]);
+    }
+
+    public function store()
+    {
+        $attrs = $this->validatePost();
 
         $attrs['user_id'] = auth()->id();
         $attrs['thumbnail'] = request()->file('thumbnail')->store('thumbnails');
@@ -45,14 +53,7 @@ class AdminPostController extends Controller
 
     public function update(Post $post)
     {
-        $attrs = request()->validate([
-            'title' => 'required',
-            'thumbnail' => 'image',
-            'slug' => ['required', Rule::unique('posts', 'slug')->ignore($post->id)], // The Slug should be unique, but ignore the slug for this post because it may be the same
-            'excerpt' => 'required',
-            'body' => 'required',
-            'category_id' => ['required', Rule::exists('categories', 'id')]
-        ]);
+        $attrs = $this->validatePost($post);
 
         if (isset($attrs['thumbnail'])) {
             $attrs['thumbnail'] = request()->file('thumbnail')->store('thumbnails');
